@@ -11,6 +11,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import Icon from '@/components/ui/icon';
+import EyeLogo from '@/components/EyeLogo';
 
 const Index = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -33,10 +34,8 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-border">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-              <Icon name="Shield" size={24} className="text-primary-foreground" />
-            </div>
+          <div className="flex items-center gap-3">
+            <EyeLogo size={40} />
             <span className="text-2xl font-display font-bold">WhiteNet</span>
           </div>
           <div className="hidden md:flex items-center gap-6">
@@ -200,7 +199,7 @@ const Index = () => {
             </div>
             <h3 className="text-3xl font-display font-bold mb-4">100% Бесплатно</h3>
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Без ограничений, без скрытых платежей. Просто скачайте приложение и пользуйтесь безопасным интернетом.
+              Без ограничений, без скрытых платежей. Сервис полностью бесплатный для всех.
             </p>
             <div className="grid md:grid-cols-3 gap-6 mb-8">
               {[
@@ -214,9 +213,20 @@ const Index = () => {
                 </div>
               ))}
             </div>
-            <Button size="lg" className="text-lg px-12">
-              <Icon name="Download" size={24} className="mr-2" />
-              Скачать бесплатно
+            <div className="bg-muted p-6 rounded-lg mb-6 text-left max-w-2xl mx-auto">
+              <div className="flex items-start gap-3 mb-3">
+                <Icon name="Info" size={24} className="text-primary mt-1 flex-shrink-0" />
+                <div>
+                  <h4 className="font-display font-bold text-lg mb-2">Приложение в разработке</h4>
+                  <p className="text-muted-foreground leading-relaxed text-sm">
+                    Наша команда работает над созданием полностью анонимного приложения. Мы тщательно продумываем баланс между анонимностью и безопасностью пользователей, потому что ваша защита — наш приоритет. Полная анонимность может создать риски, и мы хотим убедиться, что каждый пользователь останется в безопасности.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <Button size="lg" className="text-lg px-12" disabled>
+              <Icon name="Clock" size={24} className="mr-2" />
+              Скоро будет доступно
             </Button>
           </Card>
         </div>
@@ -322,15 +332,18 @@ const Index = () => {
 
       <footer className="py-12 px-4 border-t border-border">
         <div className="container mx-auto">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <Icon name="Shield" size={20} className="text-primary-foreground" />
-              </div>
+          <div className="flex flex-col items-center gap-6">
+            <div className="flex items-center gap-3">
+              <EyeLogo size={32} />
               <span className="text-xl font-display font-bold">WhiteNet</span>
             </div>
-            <div className="text-sm text-muted-foreground">
-              © 2024 WhiteNet. Безопасный интернет без границ.
+            <div className="text-center space-y-2">
+              <div className="text-sm text-muted-foreground">
+                © 2024 WhiteNet. Безопасный интернет без границ.
+              </div>
+              <div className="text-sm font-medium">
+                Сделано при поддержке <span className="font-bold">Black Crosses</span>
+              </div>
             </div>
             <div className="flex gap-4">
               <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
