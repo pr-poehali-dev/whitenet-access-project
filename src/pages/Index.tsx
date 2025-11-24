@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -13,7 +13,21 @@ import {
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
-  const [selectedPlan, setSelectedPlan] = useState<string>('');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' || 'light';
+    setTheme(savedTheme);
+    document.documentElement.classList.toggle('dark', savedTheme === 'dark');
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    document.documentElement.classList.toggle('dark', newTheme === 'dark');
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -28,19 +42,38 @@ const Index = () => {
           <div className="hidden md:flex items-center gap-6">
             <a href="#security" className="text-sm hover:text-primary transition-colors">Безопасность</a>
             <a href="#features" className="text-sm hover:text-primary transition-colors">Возможности</a>
-            <a href="#pricing" className="text-sm hover:text-primary transition-colors">Тарифы</a>
             <a href="#faq" className="text-sm hover:text-primary transition-colors">FAQ</a>
             <a href="#contacts" className="text-sm hover:text-primary transition-colors">Контакты</a>
           </div>
-          <Button>Подключиться</Button>
+          <div className="flex items-center gap-4">
+            <Button variant="ghost" size="icon" onClick={toggleTheme}>
+              <Icon name={theme === 'light' ? 'Moon' : 'Sun'} size={20} />
+            </Button>
+            <Button className="hidden md:inline-flex">Подключиться</Button>
+            <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+              <Icon name={mobileMenuOpen ? 'X' : 'Menu'} size={24} />
+            </Button>
+          </div>
         </div>
       </nav>
+
+      {mobileMenuOpen && (
+        <div className="fixed top-[73px] left-0 right-0 bg-background/95 backdrop-blur-md border-b border-border z-40 md:hidden animate-fade-in">
+          <div className="container mx-auto px-4 py-6 flex flex-col gap-4">
+            <a href="#security" className="text-lg hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>Безопасность</a>
+            <a href="#features" className="text-lg hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>Возможности</a>
+            <a href="#faq" className="text-lg hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>FAQ</a>
+            <a href="#contacts" className="text-lg hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>Контакты</a>
+            <Button className="w-full" onClick={() => setMobileMenuOpen(false)}>Подключиться</Button>
+          </div>
+        </div>
+      )}
 
       <section className="pt-32 pb-20 px-4">
         <div className="container mx-auto text-center">
           <Badge className="mb-6 animate-fade-in">Белый интернет без границ</Badge>
           <h1 className="text-5xl md:text-7xl font-display font-bold mb-6 animate-fade-in">
-            Свободный доступ к <span className="text-primary">TikTok</span>, <span className="text-secondary">YouTube</span> и <span className="text-primary">Discord</span>
+            Добро пожаловать на сайт <span className="text-primary">WhiteNet</span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8 animate-fade-in">
             Безопасный VPN-сервис с умной фильтрацией контента. Доступ к заблокированным платформам без запрещённого контента.
@@ -149,74 +182,43 @@ const Index = () => {
         </div>
       </section>
 
-      <section id="pricing" className="py-20 px-4 bg-card">
-        <div className="container mx-auto">
-          <div className="text-center mb-16">
-            <Badge className="mb-4">Тарифы</Badge>
+      <section id="free-service" className="py-20 px-4 bg-card">
+        <div className="container mx-auto max-w-4xl">
+          <div className="text-center mb-12">
+            <Badge className="mb-4">Полностью бесплатно</Badge>
             <h2 className="text-4xl md:text-5xl font-display font-bold mb-6">
-              Выберите свой план
+              WhiteNet — бесплатно навсегда
             </h2>
-            <p className="text-xl text-muted-foreground">
-              7 дней бесплатно. Отмена в любой момент.
+            <p className="text-xl text-muted-foreground mb-8">
+              Безопасный интернет должен быть доступен всем. Никаких тарифов, платежей или подписок.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {[
-              {
-                name: 'Базовый',
-                price: '299',
-                period: 'месяц',
-                features: ['1 устройство', '30 Мбит/с', 'Поддержка 24/7', 'Белый список'],
-                popular: false
-              },
-              {
-                name: 'Премиум',
-                price: '599',
-                period: 'месяц',
-                features: ['5 устройств', '1 Гбит/с', 'Приоритетная поддержка', 'Все функции'],
-                popular: true
-              },
-              {
-                name: 'Семейный',
-                price: '999',
-                period: 'месяц',
-                features: ['10 устройств', 'Безлимит', 'Персональный менеджер', 'Расширенная защита'],
-                popular: false
-              }
-            ].map((plan, i) => (
-              <Card 
-                key={i} 
-                className={`p-8 relative ${plan.popular ? 'border-primary shadow-lg shadow-primary/20 scale-105' : ''} hover:border-primary transition-all`}
-              >
-                {plan.popular && (
-                  <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-secondary">
-                    Популярный
-                  </Badge>
-                )}
-                <h3 className="text-2xl font-display font-bold mb-2">{plan.name}</h3>
-                <div className="mb-6">
-                  <span className="text-5xl font-bold">{plan.price}</span>
-                  <span className="text-muted-foreground"> ₽/{plan.period}</span>
+          <Card className="p-12 text-center border-2 border-primary">
+            <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-6">
+              <Icon name="Heart" size={40} className="text-primary-foreground" />
+            </div>
+            <h3 className="text-3xl font-display font-bold mb-4">100% Бесплатно</h3>
+            <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Без ограничений, без скрытых платежей. Просто скачайте приложение и пользуйтесь безопасным интернетом.
+            </p>
+            <div className="grid md:grid-cols-3 gap-6 mb-8">
+              {[
+                { icon: 'Users', label: 'Безлимитные устройства' },
+                { icon: 'Zap', label: 'Максимальная скорость' },
+                { icon: 'Shield', label: 'Полная защита' }
+              ].map((feature, i) => (
+                <div key={i} className="flex flex-col items-center gap-2">
+                  <Icon name={feature.icon as any} size={32} className="text-primary" />
+                  <span className="font-medium">{feature.label}</span>
                 </div>
-                <Button 
-                  className="w-full mb-6" 
-                  variant={plan.popular ? 'default' : 'outline'}
-                  onClick={() => setSelectedPlan(plan.name)}
-                >
-                  Выбрать план
-                </Button>
-                <div className="space-y-3">
-                  {plan.features.map((feature, j) => (
-                    <div key={j} className="flex items-center gap-2">
-                      <Icon name="Check" size={20} className="text-primary" />
-                      <span className="text-sm">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-              </Card>
-            ))}
-          </div>
+              ))}
+            </div>
+            <Button size="lg" className="text-lg px-12">
+              <Icon name="Download" size={24} className="mr-2" />
+              Скачать бесплатно
+            </Button>
+          </Card>
         </div>
       </section>
 
